@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ShopKeeper : MonoBehaviour
 {
     [SerializeField] List<SellableItem> sellableItems; 
     Interactable interactable;
+    bool opened = false;
     private void Awake()
     {
         interactable = GetComponent<Interactable>();
@@ -17,13 +19,13 @@ public class ShopKeeper : MonoBehaviour
     {
         if (!ShopManagerUI.Instance.Opened)
         {
-            ShopManagerUI.Instance.ShowShop(sellableItems);
+            ShopManagerUI.Instance.OpenUI(sellableItems.Select(i => i.Item).ToList());
         }
     }
 
     void CloseShop()
     {
-        ShopManagerUI.Instance.CloseShop();
+        ShopManagerUI.Instance.HideUI();
     }
 }
 
@@ -31,6 +33,5 @@ public class ShopKeeper : MonoBehaviour
 public class SellableItem 
 {
     public Item Item;
-    public int Price;
     public int Quantity;
 }

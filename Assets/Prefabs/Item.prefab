@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIsprite: {fileID: 909127535, guid: 105a1f7aa8905c34693284fcd352bf45, type: 3}
-  SellPrice: 100
+  Price: 152

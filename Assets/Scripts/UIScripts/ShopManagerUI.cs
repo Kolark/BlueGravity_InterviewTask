@@ -5,14 +5,13 @@ using static UnityEditor.Progress;
 
 public class ShopManagerUI : MonoBehaviour
 {
-    [SerializeField] GameObject container;
-    [SerializeField] ItemUI itemPrefab;
-
-    bool opened = false;
-    public bool Opened => opened;
+    [SerializeField] InventoryUIController shopInventory;
 
     public  static ShopManagerUI Instance => instance;
     private static ShopManagerUI instance;
+
+    bool opened = false;
+    public bool Opened => opened;
 
     private void Awake()
     {
@@ -26,23 +25,22 @@ public class ShopManagerUI : MonoBehaviour
         }
     }
 
-    public void ShowShop(List<SellableItem> items)
+    public void OpenUI(List<Item> items)
     {
-        for (int i = 0; i < items.Count; i++)
-        {
-            var item = Instantiate(itemPrefab, container.transform);
-            item.SetItemUI(items[i].Item, TransferType.Buy, items[i].Price);
-        }
-        opened = true;
+        //Do tween stuff here
+        shopInventory.ShowItems(items);
+        shopInventory.ActivateTransfer(TransferType.Buy, BuyItem);
     }
 
-    public void CloseShop()
+    public void HideUI()
     {
-        for (int i = 0; i < container.transform.childCount; i++)
-        {
-            Destroy(container.transform.GetChild(i).gameObject);
-        }
-        opened = false;
+        //Do tween stuff here
+        shopInventory.RemoveAllItems();
     }
 
+    public void BuyItem(ItemUI itemUI)
+    {
+        PlayerController.Instance.InventoryUIController.AddItem(itemUI.Item);
+        shopInventory.RemoveItem(itemUI);
+    }
 }

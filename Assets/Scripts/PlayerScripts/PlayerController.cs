@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    IInteractable currentInteraction;
     Rigidbody2D rb;
     bool IsMoving = false;
 
     Vector2 currentDirection = Vector2.right;
     Vector2 currentInput = Vector2.zero;
-    AnimController bodyAnim;
 
     public static PlayerController Instance => instance;
 
     private static PlayerController instance = null;
+
+    [SerializeField] PlayerAnim clothingController;
+    [SerializeField] InventoryUIController inventoryUIController;
+
+    public InventoryUIController InventoryUIController => inventoryUIController;
 
     private void Awake()
     {
@@ -22,9 +27,9 @@ public class PlayerController : MonoBehaviour
             instance = this;
         }
 
-        rb       = GetComponent<Rigidbody2D>();
-        bodyAnim = GetComponentInChildren<AnimController>();
+        rb = GetComponent<Rigidbody2D>();
     }
+
     void FixedUpdate()
     {
         Move();
@@ -39,14 +44,13 @@ public class PlayerController : MonoBehaviour
         currentInput.y = Input.GetAxisRaw("Vertical");
         IsMoving       = currentInput.magnitude != 0;
 
-        bodyAnim.SetDirection(currentDirection);
-        bodyAnim.SetMoving(IsMoving);
+        clothingController.SetDirection(currentDirection);
+        clothingController.SetMoving(IsMoving);
 
         rb.velocity = currentInput.normalized * 5;
-        Debug.Log("Move");
     }
 
-    IInteractable currentInteraction;
+
 
     void CheckInteractions()
     {
@@ -68,48 +72,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Add(Item item) 
+    {
+        inventoryUIController.AddItem(item);
+        //inventoryUIController.ActivateTransfer(TransferType.Sell, )
+    }
+
+
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawRay(transform.position, currentDirection.normalized);
-    }
-}
-
-public class ClothingManager
-{
-    public List<AnimController> animControllers = new List<AnimController>();
-    public void SetDirection(Vector2 dir)
-    {
-        foreach (var a in animControllers)
-        {
-            a.SetDirection(dir);
-        }
-    }
-
-    public void SetMoving(bool IsMoving) { foreach (var a in animControllers) a.SetMoving(IsMoving); }
-
-    public void Equip()
-    {
-
-    }
-
-    public void Unequip()
-    {
-
-    }
-}
-
-public class Inventory
-{
-    public List<Item> items = new List<Item>();
-
-    public void Add(Item item)
-    {
-        items.Add(item);
-    }
-
-    public void Remove(Item item)
-    {
-        items.Remove(item);
     }
 }

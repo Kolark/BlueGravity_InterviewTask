@@ -3,46 +3,89 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemUI : MonoBehaviour
+/// <summary> Class that defines and allows us to controll all of the ui components that an Item may have, this includes its image, buttons and other </summary>
+public class ItemUI : MonoBehaviour, IPooleable
 {
-    Item item;
+    Item item; //Item related to this UI handler
+
+    public Item Item => item;
+
     [SerializeField] Image itemImage;
 
-    [SerializeField] Button   transferButton;
+    [SerializeField] Button transferButton; //It refers to the buy/sell buttons
+    [SerializeField] Button actionButton;   //It defines a general purpose button
+
+    //Text UI components asociated with the previous buttons
     [SerializeField] TextMeshProUGUI transferTypeText;
     [SerializeField] TextMeshProUGUI priceText;
-
-    [SerializeField] Button actionButton;
     [SerializeField] TextMeshProUGUI actionText;
 
-    public Action OnTransfer;
-    public Action OnAction;
+    //Events that other scripts can listen to when transfer and action buttons are pressed
+    public Action<ItemUI> OnTransfer;
+    public Action<ItemUI> OnAction;
 
-    private void Awake()
+    //Sets the image of the item, and the reference to the item linked to this instance
+    public void SetItemUI(Item item)
     {
-        transferButton.onClick.AddListener(TransferButtonPressed);
-        actionButton.onClick.AddListener(ActionButtonPressed);
-    }
-
-    public void SetItemUI(Item item, string actionText = null)
-    {
-        actionButton.gameObject.SetActive(actionText != null);
-        this.actionText.text = actionText;
         itemImage.enabled    = true;
         itemImage.sprite     = item.UIsprite;
         this.item = item;
     }
 
-    public void SetItemUI(Item item, TransferType transferType, int amount, string actionText = null)
+    //Activates the transfer button with its correspondent transfer type
+    public void ActivateTransfer(TransferType transferType, Action<ItemUI> onTransfer)
     {
-        SetItemUI(item, actionText);
         transferButton.gameObject.SetActive(true);
         transferTypeText.text = transferType.ToString();
-        priceText.text        = amount.ToString();
+        priceText.text = item.Price.ToString();
+        OnTransfer    += onTransfer;
     }
 
-    public void TransferButtonPressed() => OnTransfer?.Invoke();
-    public void ActionButtonPressed()   => OnAction.Invoke();
+    //No longer allows it to be transferred(bought or sold)
+    public void DeActivateTransfer()
+    {
+        transferButton.gameObject.SetActive(false);
+        transferTypeText.text = null;
+        priceText.text        = null;
+    }
+
+    //Activates the button action
+    public void ActivateAction(string useText)
+    {
+        actionButton.gameObject.SetActive(true);
+        actionText.text = useText;
+    }
+
+    //Deactivates the button action
+    public void DeActivateAction()
+    {
+        actionButton.gameObject.SetActive(false);
+    }
+
+    //Event handlers
+    public void TransferButtonPressed() => OnTransfer?.Invoke(this);
+    public void ActionButtonPressed()   => OnAction.Invoke(this);
+
+    #region IPooleable
+    public void SetActive() 
+    {
+        gameObject.SetActive(true);
+    }
+
+    //Leaves it was first instantiated
+    public void DeActivate() 
+    {
+        transferButton.onClick.RemoveAllListeners();
+        actionButton.onClick.RemoveAllListeners();
+
+        itemImage.enabled = false;
+        itemImage.sprite  = null;
+        transferTypeText.text = null;
+        priceText.text        = null;
+        actionText.text       = null;
+        gameObject.SetActive(false);
+    }
+    #endregion
 
     private void OnDestroy()
     {
@@ -51,6 +94,7 @@ public class ItemUI : MonoBehaviour
     }
 }
 
+//Current defined type of transfers(for this demo)
 public enum TransferType
 {
     Buy,
