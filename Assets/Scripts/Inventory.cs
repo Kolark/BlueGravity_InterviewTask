@@ -39,3 +39,9 @@ public class Inventory : MonoBehaviour, ITransferable<Item>
 //When you begin a transfer there are some requirements that must be fullfiled
 
 //Wallet, Wallet UI
+
+//Begin transfer in shop keeper, the one whose whole deal is to transfer ! interact -> shop keeper -> player.beginTransfer -> 2 ITransferables -> 2 inve who then alert their correspondent UIs that a transfer is starting, one of those is the player, or maybe begin transfer receives a parameter whether its buy or sell, in which case the player will choose sell
+//Then back to the player who begins the transfer between him and something else
+//Always between player and some ITransferable stuff
+
+//Transfer in and transfer out also in interface
