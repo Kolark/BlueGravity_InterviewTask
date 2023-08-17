@@ -5,36 +5,111 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rb;
-    public float t;
     bool IsMoving = false;
-    float horizontal = 0;
-    float vertical = 0;
-    Animator animator;
-    [SerializeField] Animator head;
+
+    Vector2 currentDirection = Vector2.right;
+    Vector2 currentInput = Vector2.zero;
+    AnimController bodyAnim;
+
+    public static PlayerController Instance => instance;
+
+    private static PlayerController instance = null;
+
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        if(instance == null)
+        {
+            instance = this;
+        }
+
+        rb       = GetComponent<Rigidbody2D>();
+        bodyAnim = GetComponentInChildren<AnimController>();
     }
     void FixedUpdate()
     {
+        Move();
+        CheckInteractions();
+    }
 
-        if (IsMoving)
+    void Move()
+    {
+        if (IsMoving) { currentDirection = currentInput; }
+
+        currentInput.x = Input.GetAxisRaw("Horizontal");
+        currentInput.y = Input.GetAxisRaw("Vertical");
+        IsMoving       = currentInput.magnitude != 0;
+
+        bodyAnim.SetDirection(currentDirection);
+        bodyAnim.SetMoving(IsMoving);
+
+        rb.velocity = currentInput.normalized * 5;
+        Debug.Log("Move");
+    }
+
+    IInteractable currentInteraction;
+
+    void CheckInteractions()
+    {
+        var rayHit = Physics2D.Raycast(transform.position, currentDirection.normalized, 1f, LayerMask.GetMask("Default"));
+
+        var newInteraction = rayHit ? rayHit.collider.GetComponent<IInteractable>() : null ;
+
+        if(newInteraction != currentInteraction)
         {
-            animator.SetFloat("X", horizontal);
-            animator.SetFloat("Y", vertical);
-            head.SetFloat("X", horizontal);
-            head.SetFloat("Y", vertical);
+            if(newInteraction != null) newInteraction.ShowInteraction();
+            else currentInteraction.HideInteraction();
+
+            currentInteraction = newInteraction;
         }
 
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
-        t = horizontal;
-        IsMoving = horizontal != 0 || vertical != 0;
-        animator.SetBool("IsMoving", IsMoving);
-        head.SetBool("IsMoving", IsMoving);
+        if (currentInteraction != null && Input.GetKeyDown(KeyCode.E))
+        {
+            currentInteraction.Interact();
+        }
+    }
 
-        rb.velocity = new Vector2(horizontal, vertical).normalized * 5;
-        //rb.AddForce(new Vector2(horizontal, vertical).normalized * 5, ForceMode2D.Impulse);
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawRay(transform.position, currentDirection.normalized);
+    }
+}
+
+public class ClothingManager
+{
+    public List<AnimController> animControllers = new List<AnimController>();
+    public void SetDirection(Vector2 dir)
+    {
+        foreach (var a in animControllers)
+        {
+            a.SetDirection(dir);
+        }
+    }
+
+    public void SetMoving(bool IsMoving) { foreach (var a in animControllers) a.SetMoving(IsMoving); }
+
+    public void Equip()
+    {
+
+    }
+
+    public void Unequip()
+    {
+
+    }
+}
+
+public class Inventory
+{
+    public List<Item> items = new List<Item>();
+
+    public void Add(Item item)
+    {
+        items.Add(item);
+    }
+
+    public void Remove(Item item)
+    {
+        items.Remove(item);
     }
 }

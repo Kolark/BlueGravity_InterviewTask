@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c653fdc8d9a3b3148a277f7683596f1a
+guid: 714b2f18f4c6e5c438d06e719f2044b4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 24
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -116,169 +116,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Civilian1_Idle_down
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 52
-        width: 52
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2e90e5de30188044fab4475adea46e91
-      internalID: 909127535
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Civilian1_Idle_down_right
-      rect:
-        serializedVersion: 2
-        x: 52
-        y: 52
-        width: 52
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d64eb8b1838fd5a4683b0e5ebb404a38
-      internalID: -1572162300
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Civilian1_Idle_right
-      rect:
-        serializedVersion: 2
-        x: 104
-        y: 52
-        width: 52
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7ead1f26a8557c741a66320401b2eb82
-      internalID: 439239996
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Civilian1_Idle_up_right
-      rect:
-        serializedVersion: 2
-        x: 156
-        y: 52
-        width: 52
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 94bbf8e41c3e9a048830e00103e4ac9b
-      internalID: -1702921780
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Civilian1_Idle_up
+      name: buttons_1x_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 52
-        height: 52
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 5, y: 5, z: 11, w: 5}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 405c02bd06933cb49969d04eca9038fc
-      internalID: -200215275
+      spriteID: 850e20bd3a44bef4bab6e8f6e2b13774
+      internalID: 754220938
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Civilian1_Idle_up_left
+      name: buttons_1x_1
       rect:
         serializedVersion: 2
-        x: 52
+        x: 16
         y: 0
-        width: 52
-        height: 52
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 5, y: 5, z: 5, w: 5}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4539104352268b648be537300475f1b3
-      internalID: -1243566575
+      spriteID: 453be76cd6fecc64cbb0bfc66072fff6
+      internalID: -196650349
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Civilian1_Idle_left
+      name: buttons_1x_2
       rect:
         serializedVersion: 2
-        x: 104
+        x: 32
         y: 0
-        width: 52
-        height: 52
+        width: 24
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 5, y: 5, z: 5, w: 5}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a731a1f307b57f946ad06fa5724b52a1
-      internalID: -1095856405
+      spriteID: f8cb657644d5a4c498c308a54aa1a63f
+      internalID: -1325572082
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Civilian1_Idle_down_left
+      name: buttons_1x_3
       rect:
         serializedVersion: 2
-        x: 156
+        x: 56
         y: 0
-        width: 52
-        height: 52
+        width: 24
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 5, y: 5, z: 5, w: 5}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2dc1e58297d101947b2a01642d3683e8
-      internalID: 1889538130
+      spriteID: 339c43c2dd4d36e4f93cfce67c6eff76
+      internalID: 1661615742
       vertices: []
       indices: 
       edges: []
@@ -294,14 +210,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Nude_Idle_up_left: -1243566575
-      Nude_Idle_down_right: -1572162300
-      Nude_Idle_up_right: -1702921780
-      Nude_Idle_down_left: 1889538130
-      Nude_Idle_left: -1095856405
-      Nude_Idle_right: 439239996
-      Nude_Idle_down: 909127535
-      Nude_Idle_up: -200215275
+      buttons_1x_0: 754220938
+      buttons_1x_3: 1661615742
+      buttons_1x_2: -1325572082
+      buttons_1x_1: -196650349
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
