@@ -28,7 +28,7 @@ public class ShopManagerUI : MonoBehaviour
     public void OpenUI(List<Item> items)
     {
         //Do tween stuff here
-        shopInventory.ShowItems(items);
+        shopInventory.AddAllItems(items);
         shopInventory.ActivateTransfer(TransferType.Buy, BuyItem);
     }
 
@@ -40,7 +40,7 @@ public class ShopManagerUI : MonoBehaviour
 
     public void BuyItem(ItemUI itemUI)
     {
-        PlayerController.Instance.InventoryUIController.AddItem(itemUI.Item);
+        PlayerController.Instance.Add(itemUI.Item);
         shopInventory.RemoveItem(itemUI);
     }
 }

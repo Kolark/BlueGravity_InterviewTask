@@ -6,15 +6,24 @@ using static UnityEditor.Progress;
 public class InventoryUIController : MonoBehaviour
 {
     [SerializeField] GameObject container;
+    List<ItemUI> inventoryItems = new List<ItemUI>();
 
+    Inventory inventory;
     bool opened = false;
     public bool Opened => opened;
 
-    List<ItemUI> inventoryItems = new List<ItemUI>();
-
-    public void ShowItems(List<Item> items)
+    public void SetupUI(Inventory inventory) 
     {
-        for (int i = 0; i < items.Count; i++) AddItem(items[i]);
+        this.inventory = inventory;
+        AddAllItems();
+        this.inventory.OnItemAdded   += AddItemUI;
+        this.inventory.OnItemRemoved += RemoveItem;
+    }
+
+
+    public void AddAllItems()
+    {
+        for (int i = 0; i < inventory.Items.Count; i++) AddItemUI(inventory.Items[i]);
         opened = true;
     }
 
@@ -26,19 +35,20 @@ public class InventoryUIController : MonoBehaviour
         }
     }
 
-    public void AddItem(Item item)
+    public void AddItemUI(Item item)
     {
         var itemUI = ItemUIPool.Instance.GetObject();
+        item.itemUI = itemUI;
         inventoryItems.Add(itemUI);
         itemUI.SetItemUI(item);
         itemUI.transform.SetParent(container.transform);
     }
 
-    public void RemoveItem(ItemUI itemUI)
+    public void RemoveItem(Item item)
     {
-        if (inventoryItems.Remove(itemUI)) 
+        if (inventoryItems.Remove(item.itemUI)) 
         {
-            ItemUIPool.Instance.PutObject(itemUI);
+            ItemUIPool.Instance.PutObject(item.itemUI);
         }
     }
 

@@ -1,13 +1,14 @@
 using UnityEngine;
 using DG.Tweening;
 
+[RequireComponent(typeof(Interactable))]
 public class PopUp : MonoBehaviour
 {
     [SerializeField] CanvasGroup canvas;
-    [SerializeField] Interactable interactable;
-
+    Interactable interactable;
     private void Awake()
     {
+        interactable = GetComponent<Interactable>();
         interactable.OnShow += ShowPopUp;
         interactable.OnHide += HidePopUp;
     }
