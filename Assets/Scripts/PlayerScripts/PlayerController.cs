@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         else Destroy(this);
 
         rb = GetComponent<Rigidbody2D>();
-        inventoryUI.SetupUI(inventory, null);
+        inventoryUI.SetupUI(inventory);
         walletUI.SetupUI(wallet);
     }
 

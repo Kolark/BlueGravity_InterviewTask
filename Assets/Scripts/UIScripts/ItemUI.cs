@@ -29,6 +29,7 @@ public class ItemUI : MonoBehaviour, IPooleable
     {
         itemImage.enabled    = true;
         itemImage.sprite     = item.UIsprite;
+        itemImage.color      = item.Color;
         this.item = item;
     }
 

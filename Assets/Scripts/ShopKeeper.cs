@@ -16,7 +16,6 @@ public class ShopKeeper : MonoBehaviour
         interactable = GetComponent<Interactable>();
         interactable.OnInteract += OnInteract;
         interactable.OnHide     += CloseShop;
-        inventoryUI.SetupUI(inventory, null);
     }
 
     private void Start()
@@ -29,6 +28,7 @@ public class ShopKeeper : MonoBehaviour
 
     void OnInteract()
     {
+        inventoryUI.SetupUI(inventory);
         PlayerController.Instance.BeginTransfer(this.inventory);
     }
 

@@ -8,7 +8,7 @@ public class InventoryUIController : MonoBehaviour
 {
     [SerializeField] GameObject container;
     [SerializeField] bool CanUseItems;
-    //List<ItemUI> inventoryItems = new List<ItemUI>();
+
     Dictionary<Item, ItemUI> itemUIs = new Dictionary<Item, ItemUI>();
     Inventory inventory;
     bool opened = false;
@@ -23,8 +23,9 @@ public class InventoryUIController : MonoBehaviour
         defaultSizeDelta = rectTransform.sizeDelta;
     }
 
-    public void SetupUI(Inventory inventory, Func<Item, bool> canTransfer) 
+    public void SetupUI(Inventory inventory) 
     {
+        RemoveAllItems();
         this.inventory = inventory;
         AddAllItems();
         this.inventory.OnItemAdded       += AddItemUI;

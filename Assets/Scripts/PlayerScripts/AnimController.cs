@@ -5,7 +5,15 @@ using UnityEngine;
 public class AnimController : MonoBehaviour
 {
     Animator anim;
-    private void Awake() => anim = GetComponent<Animator>();
+    SpriteRenderer spriteRend;
+    
+    private void Awake()
+    {
+        anim       = GetComponent<Animator>();
+        spriteRend = GetComponent<SpriteRenderer>();
+    }
+
+    public void SetColor(Color color) => spriteRend.color = color;
     public void SetDirection(Vector2 dir)
     {
         anim.SetFloat("X", dir.x);

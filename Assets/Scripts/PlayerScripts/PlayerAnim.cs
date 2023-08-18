@@ -34,7 +34,9 @@ public class PlayerAnim : MonoBehaviour
             currentItem.Use();//By using it again it will unequip it
         }
         currentEquiped[item.ClothingType] = item;
-        animControllers[item.ClothingType] = Instantiate(item.Anim, this.transform);
+        var animController = Instantiate(item.Anim, this.transform);
+        animController.SetColor(item.Color);
+        animControllers[item.ClothingType] = animController;
 
     }
 

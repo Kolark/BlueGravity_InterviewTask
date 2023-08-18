@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 031a00afee367684d8322e76e646a6a3, type: 3}
   m_Name: Base Item
   m_EditorClassIdentifier: 
-  UIsprite: {fileID: -1763142231, guid: 566a01e512c01484cb669ddac22a7603, type: 3}
-  Color: {r: 0.7264151, g: 0.38033998, b: 0.38033998, a: 0}
-  Price: 45
+  UIsprite: {fileID: -917503179, guid: a1eaa859313de9946a771f840a46da45, type: 3}
+  Color: {r: 1, g: 1, b: 1, a: 1}
+  Price: 10

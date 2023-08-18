@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0055adec8bc20c46aeb3df40087bd02, type: 3}
-  m_Name: Clothing Item
+  m_Name: Suit3Item 1
   m_EditorClassIdentifier: 
-  UIsprite: {fileID: -1763142231, guid: e2b5cfcce86e09345823a322dd6b685f, type: 3}
-  Color: {r: 0, g: 0, b: 0, a: 0}
-  Price: 23
-  prefab: {fileID: 3904606359386184051, guid: 4bd8bb5b1c42acd45a77f8e3dc622160, type: 3}
-  clothingType: 0
+  UIsprite: {fileID: 909127535, guid: 99ab296360f37e9479db5598160f6c62, type: 3}
+  Color: {r: 1, g: 0.8156863, b: 0.16470589, a: 1}
+  Price: 75
+  prefab: {fileID: 4205790848124493487, guid: 5a39c573f3247e245995edb4fd87a56c, type: 3}
+  clothingType: 1

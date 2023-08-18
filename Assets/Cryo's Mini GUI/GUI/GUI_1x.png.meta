@@ -292,7 +292,7 @@ TextureImporter:
         width: 8
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -318,6 +318,7 @@ TextureImporter:
       GUI_1x_23: -1332898681
       GUI_1x_15: -1616457514
       GUI_1x_2: -694512231
+      heart_sprite: -1918676335
       GUI_1x_12: -593817841
       GUI_1x_16: 1210799430
       GUI_1x_0: -1023499549
