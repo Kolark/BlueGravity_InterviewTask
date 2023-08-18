@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ShopKeeper : MonoBehaviour
 {
-    [SerializeField] List<Item> sellableItems;
+    [SerializeField] List<ItemDefinition> sellableItems;
     [SerializeField] Inventory inventory;
     [SerializeField] InventoryUIController inventoryUI;
 
@@ -23,7 +23,7 @@ public class ShopKeeper : MonoBehaviour
     {
         foreach (var item in sellableItems)
         {
-            inventory.Add(Instantiate(item, this.transform));
+            inventory.Add(item.GetItem());
         }
     }
 

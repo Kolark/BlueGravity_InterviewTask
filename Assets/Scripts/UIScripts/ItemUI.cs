@@ -51,11 +51,12 @@ public class ItemUI : MonoBehaviour, IPooleable
     }
 
     //Activates the button action
-    public void SetAction(string useText, Action onUse)
+    public void SetAction(IUsableItem usableItem)
     {
         actionButton.gameObject.SetActive(true);
-        actionText.text = useText;
-        OnUse = onUse;
+        actionText.text = usableItem.actionName;
+        OnUse = usableItem.Use;
+        usableItem.OnUse = SetAction;
     }
 
     //Deactivates the button action

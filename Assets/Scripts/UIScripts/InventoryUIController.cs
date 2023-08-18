@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,31 +7,52 @@ using static UnityEditor.Progress;
 public class InventoryUIController : MonoBehaviour
 {
     [SerializeField] GameObject container;
+    [SerializeField] bool CanUseItems;
     //List<ItemUI> inventoryItems = new List<ItemUI>();
     Dictionary<Item, ItemUI> itemUIs = new Dictionary<Item, ItemUI>();
     Inventory inventory;
     bool opened = false;
     public bool Opened => opened;
-    public IEnumerable<ItemUI> AllItemUIs => itemUIs.Values; 
+    public IEnumerable<ItemUI> AllItemUIs => itemUIs.Values;
+    public RectTransform rectTransform;
+    public Vector2 defaultSizeDelta;
+    [SerializeField] Vector2 showSizeDelta;
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        defaultSizeDelta = rectTransform.sizeDelta;
+    }
 
     public void SetupUI(Inventory inventory, Func<Item, bool> canTransfer) 
     {
         this.inventory = inventory;
         AddAllItems();
-        this.inventory.OnItemAdded     += AddItemUI;
-        this.inventory.OnItemRemoved   += RemoveItem;
-        this.inventory.OnEnableTransfer += OnBeginTransfer;
+        this.inventory.OnItemAdded       += AddItemUI;
+        this.inventory.OnItemRemoved     += RemoveItem;
+        this.inventory.OnEnableTransfer  += OnBeginTransfer;
         this.inventory.OnDisableTransfer += OnCloseTransfer;
     }
 
     public void OnBeginTransfer()
     {
         ActivateTransfer();
+        ShowUI();
     }
 
     public void OnCloseTransfer()
     {
         DeactivateTransfer();
+        HideUI();
+    }
+
+    public void ShowUI()
+    {
+        this.rectTransform.DOSizeDelta(new Vector2(Screen.width * showSizeDelta.x, Screen.height * showSizeDelta.y), 0.5f).SetEase(Ease.OutBounce);
+    }
+
+    public void HideUI()
+    {
+        this.rectTransform.DOSizeDelta(this.defaultSizeDelta, 0.5f).SetEase(Ease.OutBounce);
     }
 
     public void AddAllItems()
@@ -55,8 +77,8 @@ public class InventoryUIController : MonoBehaviour
         itemUI.transform.SetParent(container.transform);
         if (inventory.LinkedTransferable != null) 
             itemUI.ActivateTransfer(inventory.TransferType, inventory.OnTransfer);
-        if (inventory.CanUseItems && item is IUsableItem usableItem) 
-            itemUI.SetAction(usableItem.actionName, usableItem.Use);
+        if (this.CanUseItems && item is IUsableItem usableItem) 
+            itemUI.SetAction(usableItem);
     }
 
     public void RemoveItem(Item item)

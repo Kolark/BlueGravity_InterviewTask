@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerAnim clothingController;
     [SerializeField] Inventory inventory;
     [SerializeField] InventoryUIController inventoryUI;
+    [SerializeField] Wallet wallet;
+    [SerializeField] WalletUI walletUI;
 
+    public PlayerAnim ClothingController => clothingController;
     public static PlayerController Instance => instance;
     private static PlayerController instance = null;
 
@@ -25,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         inventoryUI.SetupUI(inventory, null);
+        walletUI.SetupUI(wallet);
     }
 
     void Update()
@@ -81,13 +86,17 @@ public class PlayerController : MonoBehaviour
 
     public void BeginTransfer(Inventory inventory)
     {
-        this.inventory.EnableTransfer(inventory);
-        inventory.EnableTransfer(this.inventory);
+        this.inventory.EnableTransfer(inventory, ReturnAmount);
+        inventory.EnableTransfer(this.inventory, CheckAmounts);
     }
 
-    public void Equip(ClothingItem item)
+    bool CheckAmounts(Item item) => wallet.TryRemove(item.Price);
+
+    bool ReturnAmount(Item item)
     {
-        clothingController.Equip(item.anim);
+        wallet.Add(item.Price);
+        if (item is ClothingItem item1) clothingController.Unequip(item1.ClothingType);
+        return true;
     }
 
     private void OnDrawGizmos()

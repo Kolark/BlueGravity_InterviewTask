@@ -3,34 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+//Handles all clothes worn by the player and its different animations states
 public class PlayerAnim : MonoBehaviour
 {
-    public Dictionary<ClothingType , ClothingItem> animControllers = new Dictionary<ClothingType, ClothingItem>();
+    [SerializeField] AnimController playerAnimController;
+    public Dictionary<ClothingType , ClothingItem> currentEquiped = new Dictionary<ClothingType, ClothingItem>();
+    public Dictionary<ClothingType, AnimController> animControllers = new Dictionary<ClothingType, AnimController>();
 
+    public IEnumerable<AnimController> currentEquipedAnims => animControllers.Values;
     public void SetDirection(Vector2 dir)
     {
-        foreach (var a in animControllers.Values.Select(p => p.anim))
+        foreach (var a in currentEquipedAnims)
         {
             a.SetDirection(dir);
         }
+        playerAnimController.SetDirection(dir);
     }
 
-    public void SetMoving(bool IsMoving) { foreach (var a in animControllers.Values.Select(p => p.anim)) a.SetMoving(IsMoving); }
+    public void SetMoving(bool IsMoving) 
+    { 
+        foreach (var a in currentEquipedAnims) 
+            a.SetMoving(IsMoving);
+        playerAnimController.SetMoving(IsMoving);
+    }
 
-    public void Equip(ClothingType clothingType ,AnimController anim)
+    public void Equip(ClothingItem item)
     {
-        if(animControllers.TryGetValue(clothingType, out var currentAnim))
+        if(currentEquiped.TryGetValue(item.ClothingType, out var currentItem))
         {
-            Unequip(clothingType);
+            currentItem.Use();//By using it again it will unequip it
         }
-        animControllers[clothingType] = anim;
+        currentEquiped[item.ClothingType] = item;
+        animControllers[item.ClothingType] = Instantiate(item.Anim, this.transform);
+
     }
 
     public void Unequip(ClothingType clothingType)
     {
-        if (animControllers.Remove(clothingType, out var animController)) 
-        { 
-        
+        if (currentEquiped.Remove(clothingType, out var item)) 
+        {
+            animControllers.Remove(clothingType, out var instance);
+            Destroy(instance.gameObject);
         };
     }
 }
