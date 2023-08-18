@@ -7,20 +7,24 @@ public class PlayerController : MonoBehaviour
 {
     IInteractable currentInteraction;
     Rigidbody2D rb;
-    bool IsMoving = false;
 
+    //Player movement
     Vector2 currentDirection = Vector2.right;
-    Vector2 currentInput = Vector2.zero;
+    Vector2 currentInput     = Vector2.zero;
+    bool    IsMoving         = false;
 
     [SerializeField] PlayerClothesManager clothesManager;
     [SerializeField] Inventory inventory;
     [SerializeField] InventoryUIController inventoryUI;
     [SerializeField] Wallet wallet;
     [SerializeField] WalletUI walletUI;
-
+    
+    //getters
     public PlayerClothesManager ClothingController => clothesManager;
-    public static PlayerController Instance => instance;
+    public Inventory            Inventory          => inventory;
+    public static PlayerController Instance        => instance;
     private static PlayerController instance = null;
+    public Wallet Wallet => wallet;
 
     private void Awake()
     {
@@ -85,11 +89,7 @@ public class PlayerController : MonoBehaviour
     public void BeginTransfer(Inventory inventory)
     {
         this.inventory.EnableTransfer(inventory, SellItem);
-        inventory.EnableTransfer(this.inventory, CheckBalance);
     }
-
-    //Checks if wallet has enough balance in order to buy the given item
-    bool CheckBalance(Item item) => wallet.TryRemove(item.Price);
 
     //Returns balance to the wallet, and checks if the item is of clothing type so that it can be unequiped
     bool SellItem(Item item)

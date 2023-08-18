@@ -30,7 +30,11 @@ public class ShopKeeper : MonoBehaviour
 
         //Begin Transfer between players inventory and this ones
         PlayerController.Instance.BeginTransfer(this.inventory);
+        this.inventory.EnableTransfer(PlayerController.Instance.Inventory, TryBuyItem);
     }
+
+    //Checks if wallet has enough balance in order to buy the given item
+    bool TryBuyItem(Item item) => PlayerController.Instance.Wallet.TryRemove(item.Price);
 
     //Closes transfer and unpairs inventoryUI from inventory
     void CloseShop()
