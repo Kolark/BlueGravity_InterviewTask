@@ -6,7 +6,7 @@ using UnityEngine.UI;
 //Visual representation of a current Inventory state
 public class InventoryUIController : MonoBehaviour
 {
-    [SerializeField] GameObject container;
+    [SerializeField] RectTransform container;
     [SerializeField] bool       CanUseItems;
     [SerializeField] Vector2    anchorMaxOpen;
     [SerializeField] Vector2    anchorMinOpen;
@@ -96,6 +96,7 @@ public class InventoryUIController : MonoBehaviour
         itemUIs[item] = itemUI;
         itemUI.SetItemUI(item);
         itemUI.transform.SetParent(container.transform);
+        itemUI.transform.localScale = Vector3.one;
         if (inventory.LinkedTransferable != null) 
             itemUI.ActivateTransfer(inventory.TransferType, inventory.OnTransfer);
         if (this.CanUseItems && item is IUsableItem usableItem) 
