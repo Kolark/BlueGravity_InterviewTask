@@ -33,12 +33,11 @@ public class ItemUI : MonoBehaviour, IPooleable
     }
 
     //Activates the transfer button with its correspondent transfer type
-    public void ActivateTransfer(TransferType transferType, Action<ItemUI> onTransfer)
+    public void ActivateTransfer(TransferType transferType)
     {
         transferButton.gameObject.SetActive(true);
         transferTypeText.text = transferType.ToString();
         priceText.text = item.Price.ToString();
-        OnTransfer    += onTransfer;
     }
 
     //No longer allows it to be transferred(bought or sold)

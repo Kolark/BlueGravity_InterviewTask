@@ -5,22 +5,30 @@ using UnityEngine;
 
 public class ShopKeeper : MonoBehaviour
 {
-    [SerializeField] List<SellableItem> sellableItems; 
+    [SerializeField] List<SellableItem> sellableItems;
+    [SerializeField] Inventory inventory;
+    [SerializeField] InventoryUIController inventoryUI;
+
     Interactable interactable;
     bool opened = false;
     private void Awake()
     {
         interactable = GetComponent<Interactable>();
-        interactable.OnInteract += OpenShop;
+        interactable.OnInteract += OnInteract;
         interactable.OnHide     += CloseShop;
+        inventoryUI.SetupUI(inventory);
+        foreach (var sellableItem in sellableItems)
+        {
+            for (int i = 0; i < sellableItem.Quantity; i++)
+            {
+                inventory.Add(sellableItem.Item);
+            }
+        }
     }
 
-    void OpenShop()
+    void OnInteract()
     {
-        if (!ShopManagerUI.Instance.Opened)
-        {
-            ShopManagerUI.Instance.OpenUI(sellableItems.Select(i => i.Item).ToList());
-        }
+        PlayerController.Instance.BeginTransfer(this.inventory);
     }
 
     void CloseShop()

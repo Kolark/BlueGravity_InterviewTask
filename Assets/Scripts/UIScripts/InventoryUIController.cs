@@ -12,14 +12,19 @@ public class InventoryUIController : MonoBehaviour
     bool opened = false;
     public bool Opened => opened;
 
-    public void SetupUI(Inventory inventory) 
+    public void SetupUI(Inventory inventory, Func<Item, bool> canTransfer) 
     {
         this.inventory = inventory;
         AddAllItems();
-        this.inventory.OnItemAdded   += AddItemUI;
-        this.inventory.OnItemRemoved += RemoveItem;
+        this.inventory.OnItemAdded     += AddItemUI;
+        this.inventory.OnItemRemoved   += RemoveItem;
+        this.inventory.OnEnableTransfer += OnBeginTransfer;
     }
 
+    public void OnBeginTransfer()
+    {
+
+    }
 
     public void AddAllItems()
     {

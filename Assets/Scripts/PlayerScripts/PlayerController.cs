@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour
     Vector2 currentInput = Vector2.zero;
 
     [SerializeField] PlayerAnim clothingController;
-    [SerializeField] InventoryUIController inventoryUIController;
+    [SerializeField] Inventory inventory;
+    [SerializeField] InventoryUIController inventoryUI;
 
     public static PlayerController Instance => instance;
     private static PlayerController instance = null;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
         else Destroy(this);
 
         rb = GetComponent<Rigidbody2D>();
+        inventoryUI.SetupUI(inventory);
     }
 
     void Update()
@@ -75,14 +77,13 @@ public class PlayerController : MonoBehaviour
         if (currentInteraction != null && Input.GetKeyDown(KeyCode.E)) currentInteraction.Interact();
     }
 
-    public void Add(Item item) 
-    {
-        inventoryUIController.AddItemUI(item);
-        //inventoryUIController.ActivateTransfer(TransferType.Sell, )
-    }
-
     //Add -> receives sell-> gives
 
+    public void BeginTransfer(Inventory inventory)
+    {
+        this.inventory.EnableTransfer(inventory);
+        inventory.EnableTransfer(this.inventory);
+    }
 
     private void OnDrawGizmos()
     {
