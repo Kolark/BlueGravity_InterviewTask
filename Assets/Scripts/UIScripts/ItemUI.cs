@@ -21,8 +21,8 @@ public class ItemUI : MonoBehaviour, IPooleable
     [SerializeField] TextMeshProUGUI actionText;
 
     //Events that other scripts can listen to when transfer and action buttons are pressed
-    public Action<ItemUI> OnTransfer;
-    public Action<ItemUI> OnAction;
+    public Action<Item> OnTransfer;
+    public Action OnUse;
 
     //Sets the image of the item, and the reference to the item linked to this instance
     public void SetItemUI(Item item)
@@ -33,11 +33,12 @@ public class ItemUI : MonoBehaviour, IPooleable
     }
 
     //Activates the transfer button with its correspondent transfer type
-    public void ActivateTransfer(TransferType transferType)
+    public void ActivateTransfer(TransferType transferType, Action<Item> onTransfer)
     {
         transferButton.gameObject.SetActive(true);
         transferTypeText.text = transferType.ToString();
         priceText.text = item.Price.ToString();
+        OnTransfer = onTransfer;
     }
 
     //No longer allows it to be transferred(bought or sold)
@@ -46,13 +47,15 @@ public class ItemUI : MonoBehaviour, IPooleable
         transferButton.gameObject.SetActive(false);
         transferTypeText.text = null;
         priceText.text        = null;
+        OnTransfer = null;
     }
 
     //Activates the button action
-    public void ActivateAction(string useText)
+    public void SetAction(string useText, Action onUse)
     {
         actionButton.gameObject.SetActive(true);
         actionText.text = useText;
+        OnUse = onUse;
     }
 
     //Deactivates the button action
@@ -62,8 +65,8 @@ public class ItemUI : MonoBehaviour, IPooleable
     }
 
     //Event handlers
-    public void TransferButtonPressed() => OnTransfer?.Invoke(this);
-    public void ActionButtonPressed()   => OnAction.Invoke(this);
+    public void TransferButtonPressed() => OnTransfer?.Invoke(this.item);
+    public void ActionButtonPressed()   => OnUse.Invoke();
 
     #region IPooleable
     public void SetActive() 

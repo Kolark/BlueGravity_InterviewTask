@@ -6,6 +6,10 @@ using UnityEngine;
 public class Inventory : MonoBehaviour, ITransferable<Item>
 {
     [SerializeField] TransferType transferType;
+    [SerializeField] bool canUseItems;
+    public bool CanUseItems => canUseItems;
+
+    public TransferType TransferType => transferType;
 
     private List<Item> items = new List<Item>();
     public List<Item> Items => items;
@@ -19,6 +23,7 @@ public class Inventory : MonoBehaviour, ITransferable<Item>
     public Action<Item> OnItemAdded;
     public Action<Item> OnItemRemoved;
     public Action OnEnableTransfer;
+    public Action OnDisableTransfer;
 
     public void Add(Item item)
     {
@@ -37,9 +42,21 @@ public class Inventory : MonoBehaviour, ITransferable<Item>
         linkedTransferable = transferable;
     }
 
+    public void OnTransfer(Item item)
+    {
+        Remove(item);
+        LinkedTransferable.Add(item);
+    }
+
     public void CloseTransfer()
     {
-        linkedTransferable = null;
+        if (linkedTransferable != null) 
+        {
+            var l = linkedTransferable;
+            linkedTransferable = null;
+            OnDisableTransfer?.Invoke();
+            l.CloseTransfer();
+        } 
     }
 }
 

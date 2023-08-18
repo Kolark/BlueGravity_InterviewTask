@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ShopKeeper : MonoBehaviour
 {
-    [SerializeField] List<SellableItem> sellableItems;
+    [SerializeField] List<Item> sellableItems;
     [SerializeField] Inventory inventory;
     [SerializeField] InventoryUIController inventoryUI;
 
@@ -16,13 +16,14 @@ public class ShopKeeper : MonoBehaviour
         interactable = GetComponent<Interactable>();
         interactable.OnInteract += OnInteract;
         interactable.OnHide     += CloseShop;
-        inventoryUI.SetupUI(inventory);
-        foreach (var sellableItem in sellableItems)
+        inventoryUI.SetupUI(inventory, null);
+    }
+
+    private void Start()
+    {
+        foreach (var item in sellableItems)
         {
-            for (int i = 0; i < sellableItem.Quantity; i++)
-            {
-                inventory.Add(sellableItem.Item);
-            }
+            inventory.Add(Instantiate(item, this.transform));
         }
     }
 
@@ -33,7 +34,7 @@ public class ShopKeeper : MonoBehaviour
 
     void CloseShop()
     {
-        ShopManagerUI.Instance.HideUI();
+        this.inventory.CloseTransfer();
     }
 }
 

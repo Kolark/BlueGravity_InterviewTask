@@ -6,7 +6,6 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public Sprite UIsprite;
+    public Color color;
     public int Price;
-
-    public ItemUI itemUI = null;
 }

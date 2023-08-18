@@ -232,7 +232,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &401713724
 PrefabInstance:
@@ -484,6 +484,7 @@ GameObject:
   - component: {fileID: 566139169}
   - component: {fileID: 566139173}
   - component: {fileID: 566139174}
+  - component: {fileID: 566139175}
   m_Layer: 0
   m_Name: ShopKeeper
   m_TagString: Untagged
@@ -505,11 +506,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sellableItems:
   - Item: {fileID: 4843835405270141612, guid: 0ab1aba5839257c4386ca8366c8a6942, type: 3}
-    Quantity: -1
-  - Item: {fileID: 4843835405270141612, guid: 0ab1aba5839257c4386ca8366c8a6942, type: 3}
     Quantity: 1
   - Item: {fileID: 4843835405270141612, guid: 0ab1aba5839257c4386ca8366c8a6942, type: 3}
+    Quantity: 1
+  - Item: {fileID: 4843835405270141612, guid: 2525fb6df3dad0d408a376ccd5019502, type: 3}
     Quantity: 4
+  inventory: {fileID: 566139175}
+  inventoryUI: {fileID: 926483386}
 --- !u!61 &566139170
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -602,7 +605,7 @@ Transform:
   m_Children:
   - {fileID: 401713726}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &566139173
 MonoBehaviour:
@@ -629,7 +632,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 401713725}
-  interactable: {fileID: 566139173}
+--- !u!114 &566139175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566139168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 445f0b36d931fa3478b1403508524452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transferType: 0
 --- !u!1 &730170781
 GameObject:
   m_ObjectHideFlags: 0
@@ -1045,6 +1060,7 @@ GameObject:
   - component: {fileID: 1682481262}
   - component: {fileID: 1682481265}
   - component: {fileID: 1682481266}
+  - component: {fileID: 1682481267}
   - component: {fileID: 1682481264}
   - component: {fileID: 1682481263}
   m_Layer: 2
@@ -1131,7 +1147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clothingController: {fileID: 1682481266}
-  inventoryUIController: {fileID: 1070769803}
+  inventory: {fileID: 1682481267}
+  inventoryUI: {fileID: 1070769803}
 --- !u!114 &1682481266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1146,6 +1163,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animControllers:
   - {fileID: 1521120428}
+--- !u!114 &1682481267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1682481261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 445f0b36d931fa3478b1403508524452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transferType: 1
 --- !u!1001 &869949648407750711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1243,7 +1273,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 869949649736026852, guid: 906455f82bed7314194aca79f1d21cd0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -77.56349
+      value: -77.563515
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501374703555196098, guid: 906455f82bed7314194aca79f1d21cd0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501374703555196098, guid: 906455f82bed7314194aca79f1d21cd0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2501374703555196098, guid: 906455f82bed7314194aca79f1d21cd0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2945961452592208530, guid: 906455f82bed7314194aca79f1d21cd0, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1353,6 +1395,10 @@ PrefabInstance:
     - target: {fileID: 7055720350667673391, guid: 13d7c0ab6e7143540aae9b4288fba369, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7055720350813276039, guid: 13d7c0ab6e7143540aae9b4288fba369, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -18.677063
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13d7c0ab6e7143540aae9b4288fba369, type: 3}

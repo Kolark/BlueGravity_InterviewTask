@@ -1,28 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerAnim : MonoBehaviour
 {
-    public List<AnimController> animControllers = new List<AnimController>();
+    public Dictionary<ClothingType , ClothingItem> animControllers = new Dictionary<ClothingType, ClothingItem>();
 
     public void SetDirection(Vector2 dir)
     {
-        foreach (var a in animControllers)
+        foreach (var a in animControllers.Values.Select(p => p.anim))
         {
             a.SetDirection(dir);
         }
     }
 
-    public void SetMoving(bool IsMoving) { foreach (var a in animControllers) a.SetMoving(IsMoving); }
+    public void SetMoving(bool IsMoving) { foreach (var a in animControllers.Values.Select(p => p.anim)) a.SetMoving(IsMoving); }
 
-    public void Add(AnimController anim)
+    public void Equip(ClothingType clothingType ,AnimController anim)
     {
-        animControllers.Add(anim);
+        if(animControllers.TryGetValue(clothingType, out var currentAnim))
+        {
+            Unequip(clothingType);
+        }
+        animControllers[clothingType] = anim;
     }
 
-    public void Remove(AnimController anim)
+    public void Unequip(ClothingType clothingType)
     {
-        animControllers.Remove(anim);
+        if (animControllers.Remove(clothingType, out var animController)) 
+        { 
+        
+        };
     }
 }

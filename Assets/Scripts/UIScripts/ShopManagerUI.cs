@@ -25,22 +25,9 @@ public class ShopManagerUI : MonoBehaviour
         }
     }
 
-    public void OpenUI(List<Item> items)
-    {
-        //Do tween stuff here
-        shopInventory.AddAllItems(items);
-        shopInventory.ActivateTransfer(TransferType.Buy, BuyItem);
-    }
-
     public void HideUI()
     {
         //Do tween stuff here
         shopInventory.RemoveAllItems();
-    }
-
-    public void BuyItem(ItemUI itemUI)
-    {
-        PlayerController.Instance.Add(itemUI.Item);
-        shopInventory.RemoveItem(itemUI);
     }
 }

@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
         else Destroy(this);
 
         rb = GetComponent<Rigidbody2D>();
-        inventoryUI.SetupUI(inventory);
+        inventoryUI.SetupUI(inventory, null);
     }
 
     void Update()
@@ -83,6 +83,11 @@ public class PlayerController : MonoBehaviour
     {
         this.inventory.EnableTransfer(inventory);
         inventory.EnableTransfer(this.inventory);
+    }
+
+    public void Equip(ClothingItem item)
+    {
+        clothingController.Equip(item.anim);
     }
 
     private void OnDrawGizmos()

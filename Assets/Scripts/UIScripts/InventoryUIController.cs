@@ -6,11 +6,12 @@ using static UnityEditor.Progress;
 public class InventoryUIController : MonoBehaviour
 {
     [SerializeField] GameObject container;
-    List<ItemUI> inventoryItems = new List<ItemUI>();
-
+    //List<ItemUI> inventoryItems = new List<ItemUI>();
+    Dictionary<Item, ItemUI> itemUIs = new Dictionary<Item, ItemUI>();
     Inventory inventory;
     bool opened = false;
     public bool Opened => opened;
+    public IEnumerable<ItemUI> AllItemUIs => itemUIs.Values; 
 
     public void SetupUI(Inventory inventory, Func<Item, bool> canTransfer) 
     {
@@ -19,11 +20,17 @@ public class InventoryUIController : MonoBehaviour
         this.inventory.OnItemAdded     += AddItemUI;
         this.inventory.OnItemRemoved   += RemoveItem;
         this.inventory.OnEnableTransfer += OnBeginTransfer;
+        this.inventory.OnDisableTransfer += OnCloseTransfer;
     }
 
     public void OnBeginTransfer()
     {
+        ActivateTransfer();
+    }
 
+    public void OnCloseTransfer()
+    {
+        DeactivateTransfer();
     }
 
     public void AddAllItems()
@@ -34,7 +41,7 @@ public class InventoryUIController : MonoBehaviour
 
     public void RemoveAllItems()
     {
-        foreach (var itemUI in inventoryItems)
+        foreach (var itemUI in AllItemUIs)
         {
             ItemUIPool.Instance.PutObject(itemUI);
         }
@@ -43,37 +50,30 @@ public class InventoryUIController : MonoBehaviour
     public void AddItemUI(Item item)
     {
         var itemUI = ItemUIPool.Instance.GetObject();
-        item.itemUI = itemUI;
-        inventoryItems.Add(itemUI);
+        itemUIs[item] = itemUI;
         itemUI.SetItemUI(item);
         itemUI.transform.SetParent(container.transform);
+        if (inventory.LinkedTransferable != null) 
+            itemUI.ActivateTransfer(inventory.TransferType, inventory.OnTransfer);
+        if (inventory.CanUseItems && item is IUsableItem usableItem) 
+            itemUI.SetAction(usableItem.actionName, usableItem.Use);
     }
 
     public void RemoveItem(Item item)
     {
-        if (inventoryItems.Remove(item.itemUI)) 
+        if (itemUIs.Remove(item, out var itemUI)) 
         {
-            ItemUIPool.Instance.PutObject(item.itemUI);
+            ItemUIPool.Instance.PutObject(itemUI);
         }
     }
 
-    public void ActivateTransfer(TransferType transferType, Action<ItemUI> transferHandler)
+    public void ActivateTransfer()
     {
-        foreach (var item in inventoryItems) item.ActivateTransfer(transferType, transferHandler);
+        foreach (var item in AllItemUIs) item.ActivateTransfer(inventory.TransferType, inventory.OnTransfer);
     }
 
     public void DeactivateTransfer()
     {
-        foreach (var item in inventoryItems) item.DeActivateTransfer();
-    }
-
-    public void ActivateAction()
-    {
-        foreach (var item in inventoryItems) item.ActivateAction("Use");
-    }
-
-    public void DeactivateAction()
-    {
-        foreach (var item in inventoryItems) item.DeActivateAction();
+        foreach (var item in AllItemUIs) item.DeActivateTransfer();
     }
 }
