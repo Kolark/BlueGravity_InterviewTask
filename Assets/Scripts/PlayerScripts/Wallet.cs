@@ -1,13 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+//Simple wallet class that handles ins and out of a currency
 public class Wallet : MonoBehaviour
 {
     [SerializeField] int currentAmount = 0;
     public int CurrentAmount => currentAmount;
 
+    //Event called when currentAmount changes
     public Action<int> OnChange;
 
     public void Add(int amount)

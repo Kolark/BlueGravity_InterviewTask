@@ -1,16 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class ShopKeeper : MonoBehaviour
 {
-    [SerializeField] List<ItemDefinition> sellableItems;
+    [SerializeField] List<ItemDefinition> sellableItems; //Items that will fill the inventory
     [SerializeField] Inventory inventory;
     [SerializeField] InventoryUIController inventoryUI;
 
     Interactable interactable;
-    bool opened = false;
+
     private void Awake()
     {
         interactable = GetComponent<Interactable>();
@@ -20,27 +20,24 @@ public class ShopKeeper : MonoBehaviour
 
     private void Start()
     {
-        foreach (var item in sellableItems)
-        {
+        //From the sellable items list we first fill its inventory
+        foreach (var item in sellableItems) 
             inventory.Add(item.GetItem());
-        }
     }
 
     void OnInteract()
     {
+        //Pair the inventory ui to our inventory data
         inventoryUI.SetupUI(inventory);
+
+        //Begin Transfer between players inventory and this ones
         PlayerController.Instance.BeginTransfer(this.inventory);
     }
 
+    //Closes transfer and unpairs inventoryUI from inventory
     void CloseShop()
     {
-        this.inventory.CloseTransfer();
+       this.inventory.CloseTransfer();
+       this.inventoryUI.UnpairInventory();
     }
-}
-
-[System.Serializable]
-public class SellableItem 
-{
-    public Item Item;
-    public int Quantity;
 }

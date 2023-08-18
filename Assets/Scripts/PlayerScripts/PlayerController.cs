@@ -12,13 +12,13 @@ public class PlayerController : MonoBehaviour
     Vector2 currentDirection = Vector2.right;
     Vector2 currentInput = Vector2.zero;
 
-    [SerializeField] PlayerAnim clothingController;
+    [SerializeField] PlayerClothesManager clothesManager;
     [SerializeField] Inventory inventory;
     [SerializeField] InventoryUIController inventoryUI;
     [SerializeField] Wallet wallet;
     [SerializeField] WalletUI walletUI;
 
-    public PlayerAnim ClothingController => clothingController;
+    public PlayerClothesManager ClothingController => clothesManager;
     public static PlayerController Instance => instance;
     private static PlayerController instance = null;
 
@@ -53,8 +53,8 @@ public class PlayerController : MonoBehaviour
     //Give the clothingController the current values for direction and if it's moving
     void SetClothingAnimValues()
     {
-        clothingController.SetDirection(currentDirection);
-        clothingController.SetMoving(IsMoving);
+        clothesManager.SetDirection(currentDirection);
+        clothesManager.SetMoving(IsMoving);
     }
 
     //Simple movement done through velocity
@@ -82,20 +82,20 @@ public class PlayerController : MonoBehaviour
         if (currentInteraction != null && Input.GetKeyDown(KeyCode.E)) currentInteraction.Interact();
     }
 
-    //Add -> receives sell-> gives
-
     public void BeginTransfer(Inventory inventory)
     {
-        this.inventory.EnableTransfer(inventory, ReturnAmount);
-        inventory.EnableTransfer(this.inventory, CheckAmounts);
+        this.inventory.EnableTransfer(inventory, SellItem);
+        inventory.EnableTransfer(this.inventory, CheckBalance);
     }
 
-    bool CheckAmounts(Item item) => wallet.TryRemove(item.Price);
+    //Checks if wallet has enough balance in order to buy the given item
+    bool CheckBalance(Item item) => wallet.TryRemove(item.Price);
 
-    bool ReturnAmount(Item item)
+    //Returns balance to the wallet, and checks if the item is of clothing type so that it can be unequiped
+    bool SellItem(Item item)
     {
         wallet.Add(item.Price);
-        if (item is ClothingItem item1) clothingController.Unequip(item1.ClothingType);
+        if (item is ClothingItem clothingItem) clothesManager.Unequip(clothingItem.ClothingType);
         return true;
     }
 

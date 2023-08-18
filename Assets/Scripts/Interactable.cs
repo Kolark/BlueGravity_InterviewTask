@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+//Default IInteractable handler, it provides callbacks to when its being interacted with
 public class Interactable : MonoBehaviour, IInteractable
 {
-    
+    //Interactable Events
     public Action OnInteract;
     public Action OnShow;
     public Action OnHide;

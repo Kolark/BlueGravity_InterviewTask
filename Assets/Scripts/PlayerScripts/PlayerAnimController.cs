@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimController : MonoBehaviour
+//Helps control animator parameter in an element whose animation is tied to to the player movement
+public class PlayerAnimController : MonoBehaviour
 {
     Animator anim;
     SpriteRenderer spriteRend;
@@ -14,6 +15,7 @@ public class AnimController : MonoBehaviour
     }
 
     public void SetColor(Color color) => spriteRend.color = color;
+
     public void SetDirection(Vector2 dir)
     {
         anim.SetFloat("X", dir.x);

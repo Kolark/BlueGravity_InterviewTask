@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Head1Item
   m_EditorClassIdentifier: 
   UIsprite: {fileID: 909127535, guid: 51cc003b6737bc24ea3ceec49d03b4bd, type: 3}
-  Color: {r: 1, g: 1, b: 1, a: 0}
+  Color: {r: 1, g: 1, b: 1, a: 1}
   Price: 10
   prefab: {fileID: 3904606359386184051, guid: 4bd8bb5b1c42acd45a77f8e3dc622160, type: 3}
   clothingType: 0

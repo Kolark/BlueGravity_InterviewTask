@@ -1,31 +1,44 @@
 using DG.Tweening;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
+using UnityEngine.UI;
 
+//Visual representation of a current Inventory state
 public class InventoryUIController : MonoBehaviour
 {
     [SerializeField] GameObject container;
-    [SerializeField] bool CanUseItems;
+    [SerializeField] bool       CanUseItems;
+    [SerializeField] Vector2    anchorMaxOpen;
+    [SerializeField] Vector2    anchorMinOpen;
+    [SerializeField] CanvasScaler canvasScaler;
 
-    Dictionary<Item, ItemUI> itemUIs = new Dictionary<Item, ItemUI>();
+    RectTransform rectTransform;
+
+    //Paired Inventory
     Inventory inventory;
-    bool opened = false;
-    public bool Opened => opened;
+
+    //All items in the inventory and their correspondent ItemUI
+    Dictionary<Item, ItemUI> itemUIs = new Dictionary<Item, ItemUI>();
+
     public IEnumerable<ItemUI> AllItemUIs => itemUIs.Values;
-    public RectTransform rectTransform;
-    public Vector2 defaultSizeDelta;
-    [SerializeField] Vector2 showSizeDelta;
+
+
+    Vector2 defaultAnchorMax;
+    Vector2 defaultAnchorMin;
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        defaultSizeDelta = rectTransform.sizeDelta;
+        defaultAnchorMax = rectTransform.anchorMax;
+        defaultAnchorMin = rectTransform.anchorMin;
     }
 
     public void SetupUI(Inventory inventory) 
     {
+        //Clean slate
         RemoveAllItems();
+        UnpairInventory();
+
+        //Pair incoming inventory
         this.inventory = inventory;
         AddAllItems();
         this.inventory.OnItemAdded       += AddItemUI;
@@ -34,34 +47,41 @@ public class InventoryUIController : MonoBehaviour
         this.inventory.OnDisableTransfer += OnCloseTransfer;
     }
 
+    //Expands ui and activates all itemUIs transfer button(buy/sell)
     public void OnBeginTransfer()
     {
         ActivateTransfer();
         ShowUI();
     }
 
+    //Retuns ui to original size and Deactives all itemUIs transfer button(buy/sell)
     public void OnCloseTransfer()
     {
         DeactivateTransfer();
         HideUI();
     }
 
+    //Expands ui to desired size
     public void ShowUI()
     {
-        this.rectTransform.DOSizeDelta(new Vector2(Screen.width * showSizeDelta.x, Screen.height * showSizeDelta.y), 0.5f).SetEase(Ease.OutBounce);
+        this.rectTransform.DOAnchorMax(anchorMaxOpen, 0.5f).SetEase(Ease.OutBounce);
+        this.rectTransform.DOAnchorMin(anchorMinOpen, 0.5f).SetEase(Ease.OutBounce);
     }
 
+    //Retuns ui size to its original state
     public void HideUI()
     {
-        this.rectTransform.DOSizeDelta(this.defaultSizeDelta, 0.5f).SetEase(Ease.OutBounce);
+        this.rectTransform.DOAnchorMax(defaultAnchorMax, 0.5f).SetEase(Ease.OutBounce);
+        this.rectTransform.DOAnchorMin(defaultAnchorMin, 0.5f).SetEase(Ease.OutBounce);
     }
 
+    //Goes through every item in the paired inventory and adds an ItemUI per item
     public void AddAllItems()
     {
         for (int i = 0; i < inventory.Items.Count; i++) AddItemUI(inventory.Items[i]);
-        opened = true;
     }
 
+    //Returns all ItemUIs instance to their correspondant ItemUIPool
     public void RemoveAllItems()
     {
         foreach (var itemUI in AllItemUIs)
@@ -82,21 +102,39 @@ public class InventoryUIController : MonoBehaviour
             itemUI.SetAction(usableItem);
     }
 
+    //Removes item correspondant ItemUI, and recicles it to their pool
     public void RemoveItem(Item item)
     {
         if (itemUIs.Remove(item, out var itemUI)) 
         {
+            itemUI.DeActivateAction();
+            itemUI.DeActivateTransfer();
             ItemUIPool.Instance.PutObject(itemUI);
         }
     }
 
+    //Activates Transfer button in all current Item UIs 
     public void ActivateTransfer()
     {
         foreach (var item in AllItemUIs) item.ActivateTransfer(inventory.TransferType, inventory.OnTransfer);
     }
 
+    //Deactivates Transfer button in all current Item UIs 
     public void DeactivateTransfer()
     {
         foreach (var item in AllItemUIs) item.DeActivateTransfer();
+    }
+
+    //Stops listening to all paired inventory events and erases its reference
+    public void UnpairInventory()
+    {
+        if(this.inventory != null)
+        {
+            this.inventory.OnItemAdded       -= AddItemUI;
+            this.inventory.OnItemRemoved     -= RemoveItem;
+            this.inventory.OnEnableTransfer  -= OnBeginTransfer;
+            this.inventory.OnDisableTransfer -= OnCloseTransfer;
+            this.inventory = null;
+        }
     }
 }

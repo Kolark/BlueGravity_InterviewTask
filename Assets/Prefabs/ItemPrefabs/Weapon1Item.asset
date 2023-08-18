@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0055adec8bc20c46aeb3df40087bd02, type: 3}
   m_Name: Weapon1Item
   m_EditorClassIdentifier: 
-  UIsprite: {fileID: 909127535, guid: 96d254d9363c76e43ba4270ecddfb8b2, type: 3}
+  UIsprite: {fileID: -1805866406, guid: 685d095ab88ac1c47b3cd9ef1e5cde96, type: 3}
   Color: {r: 0, g: 0, b: 0, a: 1}
   Price: 50
   prefab: {fileID: 5738051447256507720, guid: 7fb1a7ba5ad880c4baf8d116fa4802ea, type: 3}

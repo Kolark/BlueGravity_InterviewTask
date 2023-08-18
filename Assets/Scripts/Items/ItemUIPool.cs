@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Simple pool for ItemUIs to be used accross differente InventoryUI's
 public class ItemUIPool : MonoBehaviour, IPool<ItemUI>
 {
 
@@ -17,44 +18,40 @@ public class ItemUIPool : MonoBehaviour, IPool<ItemUI>
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+        if (instance == null) instance = this;
+        else Destroy(this.gameObject);
+        pool = new Queue<ItemUI>(amount);
         CreateObjects(amount);
     }
 
     public void CreateObjects(int amount)
     {
-        pool = new Queue<ItemUI>(amount);
-        for (int i = 0; i < amount; i++)
-        {
-            PutObject(CreateObject());
-        }
+        for (int i = 0; i < amount; i++) PutObject(CreateObject());
     }
 
     public ItemUI GetObject()
     {
-        ItemUI pooleable = pool.Dequeue();
-        pooleable.SetActive();
-        pooleable.transform.SetParent(null);
-        return pooleable;
+        //If it fails to Dequeue we make sure to increase the pool size in increments of 5
+        if (pool.TryDequeue(out var itemUI))
+        {
+            itemUI.SetActive();
+            itemUI.transform.SetParent(null);
+            return itemUI;
+        }
+        else
+        {
+            CreateObjects(5);
+            return GetObject();
+        }
     }
 
-    public void PutObject(ItemUI @object)
+    public void PutObject(ItemUI itemUI)
     {
-        @object.transform.SetParent(spawnPosition);
-        @object.transform.localPosition = Vector3.zero;
-        @object.DeActivate();
-        pool.Enqueue(@object);
+        itemUI.transform.SetParent(spawnPosition);
+        itemUI.transform.localPosition = Vector3.zero;
+        itemUI.DeActivate();
+        pool.Enqueue(itemUI);
     }
 
-    private ItemUI CreateObject()
-    {
-        return Instantiate(itemUIPrefab.gameObject, spawnPosition.position, Quaternion.identity).GetComponent<ItemUI>();
-    }
+    private ItemUI CreateObject() => Instantiate(itemUIPrefab.gameObject, spawnPosition.position, Quaternion.identity).GetComponent<ItemUI>();
 }

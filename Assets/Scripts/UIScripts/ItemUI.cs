@@ -55,6 +55,7 @@ public class ItemUI : MonoBehaviour, IPooleable
     public void SetAction(IUsableItem usableItem)
     {
         actionButton.gameObject.SetActive(true);
+        Debug.Log($"Setted Action {usableItem.actionName}", this.gameObject);
         actionText.text = usableItem.actionName;
         OnUse = usableItem.Use;
         usableItem.OnUse = SetAction;
@@ -63,6 +64,7 @@ public class ItemUI : MonoBehaviour, IPooleable
     //Deactivates the button action
     public void DeActivateAction()
     {
+        OnUse = null;
         actionButton.gameObject.SetActive(false);
     }
 
